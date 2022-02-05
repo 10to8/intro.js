@@ -67,6 +67,7 @@
     "node >=0.1.90"
   ],
   "files": [
+    "src/*",
     "*.js",
     "*.css",
     "themes/*",
