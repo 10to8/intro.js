@@ -68,6 +68,7 @@
   ],
   "files": [
     "src/*",
+    "dist/*",
     "*.js",
     "*.css",
     "themes/*",
