@@ -23,6 +23,15 @@ export default function getOffset(element, relativeEl) {
   const xr = relativeEl.getBoundingClientRect();
   const relativeElPosition = getPropValue(relativeEl, "position");
 
+  var docX = 0, docY = 0;
+  var scanningDocument = element.ownerDocument;
+  while(scanningDocument != window.top.document) {
+    const iframeBounds = scanningDocument.defaultView.frameElement.getBoundingClientRect();
+    docX += iframeBounds.left;
+    docY += iframeBounds.top;
+    scanningDocument = scanningDocument.defaultView.parent.document;
+  }
+
   let obj = {
     width: x.width,
     height: x.height,
@@ -36,19 +45,19 @@ export default function getOffset(element, relativeEl) {
     // when the container of our target element is _not_ body and has either "relative" or "sticky" position, we should not
     // consider the scroll position but we need to include the relative x/y of the container element
     return Object.assign(obj, {
-      top: x.top - xr.top,
-      left: x.left - xr.left,
+      top: x.top - xr.top + docY,
+      left: x.left - xr.left + docX,
     });
   } else {
     if (isFixed(element)) {
       return Object.assign(obj, {
-        top: x.top,
-        left: x.left,
+        top: x.top + docY,
+        left: x.left + docX,
       });
     } else {
       return Object.assign(obj, {
-        top: x.top + scrollTop,
-        left: x.left + scrollLeft,
+        top: x.top + scrollTop + docY,
+        left: x.left + scrollLeft + docX,
       });
     }
   }
